@@ -7,8 +7,6 @@ import "@openzeppelin/contracts@4.6.0/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts@4.6.0/access/Ownable.sol";
 
 
-
-
 contract OZOnlyOwnerMint is ERC721, Ownable {
 
     constructor() ERC721("OZOnlyOwnerMint", "OZNER") {}
