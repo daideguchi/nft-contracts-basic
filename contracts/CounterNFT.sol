@@ -6,9 +6,18 @@ pragma solidity ^0.8.14;
 import "@openzeppelin/contracts@4.6.0/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts@4.6.0/access/Ownable.sol";
 import "@openzeppelin/contracts@4.6.0/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts@4.6.0/utils/Counters.sol";
+
 
 
 contract CounterNFT is ERC721URIStorage, Ownable {
+
+        /**
+     * @dev
+     * - _tokenIdsはCounterの全関数が使える
+     */
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
 
 
     /**
@@ -22,15 +31,18 @@ contract CounterNFT is ERC721URIStorage, Ownable {
     /**
      * @dev 
      * - このコントラクトをデプロイしたアドレスだけがmint可能 onlyOwner
+     * - tokenIdをインクリメント　_tokenIds.increment();
      * - nftMint関数実行アドレス(=デプロイアドレス)にtokenIdを紐づけ _msgSender()
      * - mintの際にURIを設定_setTkenURI()
      * - EVENT発火 emit TokenURIChanged
      */
     function nftMint(string calldata uri) public onlyOwner {
-        
-        _mint(_msgSender(), tokenId);
-        _setTokenURI(tokenId, uri);
-        emit TokenURIChanged(_msgSender(), tokenId, uri);
+        _tokenIds.increment();
+        uint256 newTokenId = _tokenIds.current();
+
+        _mint(_msgSender(), newTokenId);
+        _setTokenURI(newTokenId, uri);
+        emit TokenURIChanged(_msgSender(), newTokenId, uri);
     }
 
 
