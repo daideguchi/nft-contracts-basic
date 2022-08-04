@@ -5,10 +5,11 @@ pragma solidity ^0.8.14;
 import "@openzeppelin/contracts@4.6.0/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts@4.6.0/access/Ownable.sol";
 import "@openzeppelin/contracts@4.6.0/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts@4.6.0/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts@4.6.0/utils/Counters.sol";
 import "@openzeppelin/contracts@4.6.0/utils/Strings.sol";
 
-contract CounterNFT is ERC721URIStorage, Ownable {
+contract BurnableNFT is ERC721Burnable, ERC721URIStorage, Ownable {
 
     /**
      * @dev
@@ -23,7 +24,7 @@ contract CounterNFT is ERC721URIStorage, Ownable {
      */
     event TokenURIChanged(address indexed sender, uint256 indexed tokenId, string uri);
 
-    constructor() ERC721("CounterNFT", "COUNTER") {}
+    constructor() ERC721("BurnableNFT", "BURN") {}
 
     /**
      * @dev 
@@ -53,5 +54,21 @@ contract CounterNFT is ERC721URIStorage, Ownable {
     function _baseURI() internal pure override returns (string memory){
         return "ipfs://bafybeigyod7ldrnytkzrw45gw2tjksdct6qaxnsc7jdihegpnk2kskpt7a/";
     }
+
+    /**
+     * @dev
+     * - オーバーライド
+     */
+    function tokenURI(uint256 tokenId) public view  override(ERC721, ERC721URIStorage) returns (string memory) {
+        return super.tokenURI(tokenId);
+    }
+
+    /**
+     * @dev
+     * - オーバーライド
+     */
+        function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+            super._burn(tokenId);
+        }
 
 }
